@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="template">
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/style.css" />
+<head>
+<meta charset="utf-8">
+<title>Ajout des formations</title>
+</head>
+<body>
+	<div layout:fragment="Mycontent">
+		<div class="container mt-5">
+			<div class="card">
+				<div class="card-header" th:if="${mode=='new'}">Ajout des formation</div>
+				<div class="card-header" th:if="${mode=='edit'}">Modification des formations</div>
+				<div class="card-body">
+					<form th:action="@{saveFormation}" method="post">
+						<div class="form-group">
+							<label class="control-label" hidden>ID  :</label> <input
+								type="hidden" name="idFormation" class="form-control"
+								th:value="${formation.idFormation}" />
+						</div>
+						<div class="form-group">
+							<label class="control-label">Nom de formation :</label> <input
+								type="text" name="nomFormation" class="form-control"
+								th:value="${formation.nomFormation}" /> <span
+								th:errors=${formation.nomFormation} class="text-danger">
+							</span>
+						</div>
+						<div class="form-group">
+							<label class="control-label">decription de la formation :</label> <input
+								type="text" name="descriptionFormation" class="form-control"
+								th:value="${formation.descriptionFormation}" /> <span
+								th:errors=${formation.descriptionFormation} class="text-danger">
+							</span>
+
+						</div>
+						
+                       
+						<div>
+							<button type="submit" class="btn btn-primary">Valider</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

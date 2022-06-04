@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="template"
+	xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity5>
+<link rel="stylesheet" type="text/css"
+	href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="../static/style.css" />
+<head>
+<meta charset="utf-8">
+<title>Liste des Etudiants</title>
+</head>
+<body>
+	<div layout:fragment="Mycontent">
+		<div class="container mt-5">
+			<div class="card">
+				<div class="card-header">Liste des Etudiants</div>
+				<div class="card-body">
+
+					<form th:action="@{/search-by-name}" method="get">
+						<div class="mb-3">
+							<label>Mot :</label> <input type="text" name="nomEn"
+								placeholder="nom de l'etudiant" /> <input type="submit"
+								class="btn btn-primary" value="Chercher">
+						</div>
+					</form>
+
+
+					<form th:action="@{/search-by-formation}" method="get">
+						<div class="mb-3">
+							<div class="form-group">
+								<label class="control-label">Formation :</label> 
+								<select name="s" class="form-control"  >
+									<option th:each="e:${formations}" th:value="${e.idFormation}" th:text="${e.nomFormation}"></option>
+								</select>
+							</div>
+							<input type="submit" class="btn btn-primary" value="chercher">
+						</div>
+					</form>
+
+
+
+					<table class="table table-striped">
+						<tr>
+							<th>ID</th>
+							<th>Nom etudiant</th>
+							<th>niveau </th>
+							<th>Date </th>
+							<th>Formation</th>
+
+						</tr>
+						<tr th:each="e:${etudiants}">
+							<td th:text="${e.idEtudiant}"></td>
+							<td th:text="${e.nomEtudiant}"></td>
+							<td th:text="${e.niveauEtudiant}"></td>
+							<td th:text="${e.date}"></td>
+							<td th:if="${!#strings.isEmpty(e.formation)}"
+								th:text="${e.formation.nomFormation}"></td>
+							<td th:if="${#strings.isEmpty(e.formation)}"
+								th:text="${'Pas de formation'}"></td>
+							<td sec:authorize="hasRole('ADMIN')"><a
+								class="btn btn-success"
+								th:href="@{modifier-etudiant(id=${e.idEtudiant})}">Editer</a></td>
+							<td sec:authorize="hasRole('ADMIN')"><a
+								class="btn btn-danger"
+								onclick="return confirm('Etes-vous sûr ?')"
+								th:href="@{supprimerEtudiant(id=${e.idEtudiant},
+page=${currentPage},size=${size})}">Supprimer</a></td>
+						</tr>
+					</table>
+					<ul class="nav nav-pills">
+						<li th:each="page,status:${pages}"><a
+							th:class="${status.index==currentPage?'btn btn-primary':'btn' }"
+							th:href="@{ list-etudiant(page=${status.index}, size=${size} ) }"
+							th:text="${status.index }"></a></li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
